@@ -1,32 +1,28 @@
 # A* Algorithm
 
 graph = {
-    'A': [('B', 1), ('C', 3)],
-    'B': [('D', 1), ('E', 5)],
-    'C': [('F', 2)],
-    'D': [('G', 4)],
-    'E': [('G', 1)],
-    'F': [('G', 1)],
-    'G': []
+    'S': [('A', 1), ('B', 4)],
+    'A': [('B', 2), ('C', 2),('D', 12)],
+    'B': [('C', 2)],
+    'C': [('D', 3)],
+    'D': []
 }
 
 # Heuristic values
 h = {
-    'A': 7,
-    'B': 6,
-    'C': 4,
-    'D': 4,
-    'E': 1,
-    'F': 1,
-    'G': 0
+    'S': 7,
+    'A': 6,
+    'B': 2,
+    'C': 1,
+    'D': 0
 }
 
-open_list = ['A']
+open_list = ['S']
 closed_list = []
-g = {'A': 0}
-parent = {'A': 'A'}
+g = {'S': 0}
+parent = {'S': 'S'}
 
-goal = 'G'
+goal = 'D'
 
 while open_list:
     
@@ -38,7 +34,7 @@ while open_list:
         while parent[n] != n:
             path.append(n)
             n = parent[n]
-        path.append('A')
+        path.append('S')
         path.reverse()
 
         print("Path found:", path)
@@ -48,7 +44,13 @@ while open_list:
     closed_list.append(n)
 
     for (m, cost) in graph[n]:
+        new_cost = g[n] + cost
+
         if m not in open_list and m not in closed_list:
             open_list.append(m)
             parent[m] = n
-            g[m] = g[n] + cost
+            g[m] = new_cost
+
+        elif new_cost < g.get(m, float('inf')):
+            g[m] = new_cost
+            parent[m] = n
